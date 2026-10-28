@@ -46,3 +46,39 @@ if (form) {
   });
 }
 document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+
+// Theme preference persists across pages and visits; storage is optional.
+const themeButton = document.querySelector('.theme-toggle');
+if (themeButton) {
+  const root = document.documentElement;
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+  const validTheme = value => value === 'light' || value === 'dark' ? value : null;
+  let preferredTheme = null;
+  try { preferredTheme = validTheme(localStorage.getItem('academic-theme')); } catch (_) {}
+
+  function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    const action = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    themeButton.setAttribute('aria-label', action);
+    themeButton.setAttribute('title', action);
+    themeButton.setAttribute('aria-pressed', String(isDark));
+  }
+
+  applyTheme(preferredTheme || (systemTheme.matches ? 'dark' : 'light'));
+  themeButton.addEventListener('click', () => {
+    preferredTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(preferredTheme);
+    try { localStorage.setItem('academic-theme', preferredTheme); } catch (_) {}
+  });
+  systemTheme.addEventListener('change', event => {
+    if (!preferredTheme) applyTheme(event.matches ? 'dark' : 'light');
+  });
+  window.addEventListener('storage', event => {
+    if (event.key !== 'academic-theme' && event.key !== null) return;
+    preferredTheme = event.key === null ? null : validTheme(event.newValue);
+    applyTheme(preferredTheme || (systemTheme.matches ? 'dark' : 'light'));
+  });
+}
+

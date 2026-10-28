@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'docs'
 DATA = json.loads((ROOT / 'data.json').read_text(encoding='utf-8'))
 OUT.mkdir(exist_ok=True)
-for asset in ['styles.css', 'app.js']:
+for asset in ['styles.css', 'app.js', 'theme-init.js', 'theme.css']:
     shutil.copyfile(ROOT / 'source' / asset, OUT / asset)
 (OUT / '.nojekyll').touch()
 
@@ -19,9 +19,9 @@ def page(key, title, content, description=None):
     nav = ''.join(f'<a href="{slug}.html"'+(' aria-current="page"' if slug == key else '')+f'>{label}</a>' for slug, label in NAV)
     desc = description or f'{title}: Cătălin-Andrei Niculescu, PhD student in Electrical Engineering and IT Specialist in Data Science at ICI Bucharest.'
     html = f'''<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="{esc(desc, quote=True)}"><title>{esc(title)} | Cătălin-Andrei Niculescu</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script></head>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="{esc(desc, quote=True)}"><title>{esc(title)} | Cătălin-Andrei Niculescu</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><script src="theme-init.js?v=1"></script><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="theme.css?v=1"><script src="app.js?v=theme-1" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header class="header"><div class="wrap header-inner"><a class="brand" href="index.html"><span class="monogram">CN</span><span class="brand-name">Cătălin-Andrei Niculescu<small>Research &amp; academic profile</small></span></a><button class="menu-toggle" aria-expanded="false" aria-controls="navigation" type="button">Menu</button><nav id="navigation" class="nav" aria-label="Main navigation">{nav}</nav></div></header>
+<header class="header"><div class="wrap header-inner"><a class="brand" href="index.html"><span class="monogram">CN</span><span class="brand-name">Cătălin-Andrei Niculescu<small>Research &amp; academic profile</small></span></a><button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"><svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 13.1A9 9 0 0 1 10.9 3.2a9 9 0 1 0 9.9 9.9Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></button><button class="menu-toggle" aria-expanded="false" aria-controls="navigation" type="button">Menu</button><nav id="navigation" class="nav" aria-label="Main navigation">{nav}</nav></div></header>
 <main id="main">{content}</main>
 <footer class="footer"><div class="wrap"><div class="footer-top"><div><strong>Cătălin-Andrei Niculescu</strong><br>Electrical engineering · AI · Environmental monitoring</div><nav aria-label="Academic profiles">{PROFILES}<a href="cv.html">Curriculum vitae</a></nav></div><div class="footer-bottom"><span>© 2026 Cătălin-Andrei Niculescu · Bucharest, Romania</span></div></div></footer></body></html>'''
     (OUT / f'{key}.html').write_text(html, encoding='utf-8')
@@ -89,3 +89,4 @@ bib = '''@article{Nicolae2026Unity,
 '''
 (OUT / 'assets' / 'publications.bib').write_text(bib, encoding='utf-8')
 print(f'Built {len(list(OUT.glob("*.html")))} HTML pages in {OUT}')
+
