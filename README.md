@@ -88,5 +88,5 @@ After committing changes to the published files, check the repository's **Action
 
 ## Contact
 
-For academic enquiries and collaboration: [catalin.niculescu@ici.ro](mailto:catalin.niculescu@ici.ro).
+For academic enquiries and collaboration: [catalin.niculescu@ici.ro](mailto:catalin.niculescu@ici.ro), [catalin.niculescu00@stud.electro.upb.ro](mailto:catalin.niculescu00@stud.electro.upb.ro), [catalin_andrei00@yahoo.com](mailto:catalin_andrei00@yahoo.com).
 
